@@ -315,52 +315,68 @@ c0fcd18205a3455f9877d3c36ea0a53e47091619 10.244.2.248:6379@16379 slave 8434b3117
 
 调整好后，查看pod状态:
 
-```
-[root@kubemaster redis-5.0.5-cluster]# kubectl get pod -owide -n redis-cluster
-NAME          READY     STATUS    RESTARTS   AGE       IP             NODE
-redis-app-0   1/1       Running   0          13m       10.244.0.191   kubemaster
-redis-app-1   1/1       Running   0          13m       10.244.2.8     slave2
-redis-app-2   1/1       Running   0          12m       10.244.1.69    slave1
-redis-app-3   1/1       Running   0          12m       10.244.0.192   kubemaster
-redis-app-4   1/1       Running   0          12m       10.244.1.70    slave1
-redis-app-5   1/1       Running   0          12m       10.244.2.9     slave2
-redis-app-6   1/1       Running   0          3m        10.244.2.10    slave2
-```
+`[root@kubemaster redis-5.0.5-cluster]# kubectl get pod -owide -n redis-cluster`
+
+`NAME          READY     STATUS    RESTARTS   AGE       IP             NODE`
+
+`redis-app-0   1/1       Running   0          13m       10.244.0.191   kubemaster`
+
+`redis-app-1   1/1       Running   0          13m       10.244.2.8     slave2`
+
+`redis-app-2   1/1       Running   0          12m       10.244.1.69    slave1`
+
+`redis-app-3   1/1       Running   0          12m       10.244.0.192   kubemaster`
+
+`redis-app-4   1/1       Running   0          12m       10.244.1.70    slave1`
+
+`redis-app-5   1/1       Running   0          12m       10.244.2.9     slave2`
+
+`redis-app-6   1/1       Running   0          3m        10.244.2.10    slave2`
 
 此时我们加入新增的pod容器中执行加入集群指令
 
-```
-127.0.0.1:6379> CLUSTER MEET 10.244.0.191 6379
-```
+`127.0.0.1:6379> CLUSTER MEET 10.244.0.191 6379`
 
 加入成功后，我们可以查看集群状态信息观察是否加入:
 
-```
-127.0.0.1:6379> CLUSTER INFO
-cluster_state:ok
-cluster_slots_assigned:16384
-cluster_slots_ok:16384
-cluster_slots_pfail:0
-cluster_slots_fail:0
-cluster_known_nodes:7
-cluster_size:3
-cluster_current_epoch:11
-cluster_my_epoch:0
-cluster_stats_messages_ping_sent:451
-cluster_stats_messages_pong_sent:463
-cluster_stats_messages_meet_sent:6
-cluster_stats_messages_sent:920
-cluster_stats_messages_ping_received:463
-cluster_stats_messages_pong_received:457
-cluster_stats_messages_received:920
-```
+`127.0.0.1:6379> CLUSTER INFO`
+
+`cluster_state:ok`
+
+`cluster_slots_assigned:16384`
+
+`cluster_slots_ok:16384`
+
+`cluster_slots_pfail:0`
+
+`cluster_slots_fail:0`
+
+`cluster_known_nodes:7`
+
+`cluster_size:3`
+
+`cluster_current_epoch:11`
+
+`cluster_my_epoch:0`
+
+`cluster_stats_messages_ping_sent:451`
+
+`cluster_stats_messages_pong_sent:463`
+
+`cluster_stats_messages_meet_sent:6`
+
+`cluster_stats_messages_sent:920`
+
+`cluster_stats_messages_ping_received:463`
+
+`cluster_stats_messages_pong_received:457`
+
+`cluster_stats_messages_received:920`
 
 # 清理环境
 
-```
-kubectl delete -f addons/.
-kubectl delete pvc -n redis-cluster $(kubectl get pvc -n redis-cluster |awk '{print $1}' |grep -v NAME)
-```
+* kubectl delete -f addons/.
+* kubectl delete pvc -n redis-cluster $\(kubectl get pvc -n redis-cluster \|awk '{print $1}' \|grep -v NAME\)
 
 
 
