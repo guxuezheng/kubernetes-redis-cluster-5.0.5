@@ -15,7 +15,7 @@ spec:
       terminationGracePeriodSeconds: 20
       containers:
       - name: redis
-        image: "192.9.200.86:80/library/redis:5.0.5"
+        image: "redis:5.0.5"
         command:
           - "redis-server"
         args:
